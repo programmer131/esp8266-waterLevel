@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My first chart using FusionCharts Suite XT</title>
+<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+<script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.min.js"></script>
+<script src="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/js/jquery-plus-ui.min.js"></script>
+<script src="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/js/jquery-ui-slider-pips.js"></script>
+<link rel="stylesheet" href="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jqueryui.min.css">
+<link rel="stylesheet" href="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/jquery-ui-slider-pips.min.css">
+<link rel="stylesheet" href="https://simeydotme.github.io/jQuery-ui-Slider-Pips/dist/css/app.min.css">
+<style>
+.raphael-group-7-background rect {
+fill: rgb(218, 218, 218) !important;
+}
+[id*=flat-slider].ui-slider.ui-slider-vertical {
+	height: 220px;
+	margin-top: 90px;
+    margin-right: 15%;
+    margin-bottom: 90px;
+    margin-left: 15%;
+}
+$bg: #434d5a;
+[id*=flat-slider].ui-slider,
+[id*=flat-slider].ui-slider .ui-slider-pip .ui-slider-line {
+    background: lighten($bg, 15%);
+}
+[id*=flat-slider].ui-slider .ui-slider-handle .ui-slider-tip:after {
+    border-left-color: #434d5a;
+}
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-hover, 
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-focus, 
+[id*=flat-slider].ui-slider .ui-slider-handle.ui-state-active {
+      border-color: white; }
+body {
+background-image: url("https://drive.google.com/uc?id=1JC1A8qTXnHrcvFH1-un6D3rTjfEAggVn");
+   
+    font-family: "Roboto";
+}
+.stuff {    
+    padding: 10px 5px 5px;
+    max-width: 150px;    
+	max-height: 550px;    
+}
+div.inline { float:left; }
+.clearBoth { clear:both; }
+
+</style>
+<script>
+$(document).ready(function() {
+            setInterval("get_motor_status()", 2000);
+        });
+				
+        function get_motor_status() {
+            var someUrl = "/motor_status";
+            $.ajax({url: someUrl,dataType: "text",success: function(response) {
+                    if (response == "on")
+                        $("#status").html("Motor ON")
+                    else
+                        $("#status").html("Motor OFF")
+                   }})}		
+				
+    </script>
+	
+<script type="text/javascript">
+    FusionCharts.ready(function(){
+    var fusioncharts = new FusionCharts({
+    "type": "cylinder",
+    "dataFormat": "json",
+    "id": "fuelMeter",
+    "renderAt": "chart-container",
+    "width": "200",
+    "height": "350",
+    "dataSource": {
+        "chart": {
+            "theme": "fint",
+            "caption": "Water Level in Bucket",
+            "subcaption": "at my Home",
+            "lowerLimit": "0",
+            "upperLimit": "15",
+            "lowerLimitDisplay": "Empty",
+            "upperLimitDisplay": "Full",
+            "numberSuffix": " ltrs",
+            "showValue": "1",
+            "chartBottomMargin": "25"
+        },
+        "value": "10"
+    },
+    "events": {
+    "rendered": function(evtObj, argObj) {
+	setInterval(function() {
+	var someUrl = "/level";
+					$.ajax({
+						url: someUrl,
+						dataType: "text",
+						success: function(response) {
+							 evtObj.sender.feedData("&value=" + response);
+						},
+						timeout: 2000
+					})	
+		
+        }, 1000); 
+   }
+}
+});
+    fusioncharts.render();
+    });
+</script>
+</head>
+<body>
+<div style="width:600px;margin:auto;">
+
+<div class="stuff">
+ 
+    <main>        
+        <div class="inline" id="flat-slider-vertical-1"></div>        
+    </main>
+    
+</div>
+    <div style="margin-left: 10px;" class="inline" id="chart-container">FusionCharts XT will load here!</div>
+	<div class="inline" id="status" style="background-color: lightgrey;
+    width: 100px;
+    border: 10px solid;
+	border-color: coral;
+    padding: 2px;
+    margin: 1px;">Motor OFF</div>
+ </div>
+
+<script>
+$.extend( $.ui.slider.prototype.options, { 
+    animate: 300
+});
+
+
+$("#flat-slider-vertical-1")
+    .slider({
+        max: 16,
+        min: 0,
+        range: true,
+         values: [3, 12],
+        orientation: "vertical",
+		
+		slide: function( event, ui ) {
+		console.log(ui.values);
+		var someUrl = "/configRange?lower=" + ui.values[0]+"&upper="+ui.values[1];
+            $.ajax(
+			{
+				url: someUrl,dataType: "text",success: function(response) {}
+			})               
+        }
+    })
+    .slider("pips", {
+        first: "pip",
+        last: "pip"
+    })
+    .slider("float");
+</script>
+
+	</body>
+</html>
