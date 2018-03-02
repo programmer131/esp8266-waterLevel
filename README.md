@@ -2,7 +2,7 @@
 water level control system using ESP8266 and HC-SR04
 
 Instructions:
-Step 1: hardware setup
+Step 1: 
 you need a cylindrical tank and measure its capacity in liters, may use this tool for that
 http://aqua.ucdavis.edu/Calculations/Volume_of_a_Cylindrical_Tank.htm
 if don't have cylidrical tank, then need to modify code accordingly.
