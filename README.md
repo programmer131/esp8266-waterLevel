@@ -24,6 +24,8 @@ you can locate these settings inside $("#flat-slider-vertical-1").slider(
 html file is already included in Arduino sketch, you can modify these paramters inside arduino sketch.
 
 Step3:
+create new adafruit IO feed and name it as 'waterLevel'
+
 uncomment these two lines in sketch and write your wifi ssid/password
 /*const char* ssid = "ssid";
 const char* password = "password";*/
