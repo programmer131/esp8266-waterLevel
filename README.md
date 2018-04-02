@@ -65,3 +65,5 @@ these are default water level limits, these values will be applied on reset unti
 int waterLevelLowerThreshold=3;
 
 int waterLevelUpperThreshold=12;
+
+Need to install this HCSR04 library: https://github.com/Martinsos/arduino-lib-hc-sr04
